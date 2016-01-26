@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Route Maker 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    
+    
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+
+        <link rel="stylesheet" href="css/style.css">
+
+    
+    
+    
+  </head>
+
+  <body>
+
+    <div class="background-title">Route Maker 2</div>
+<div class="map2-container">
+  <div class="map2" style="transform: translate(-240px,50px)"></div>
+  <div class="touch-click-reader"></div>
+  <div class="circles-lines-container" style="transform: translate(-240px,50px)">
+    <div class="bottom-panel z5 initial-hidden">
+      <div class="map-url z5">
+        <label for="map-url-input">Map Image</label>
+        <input type="text" id="map-url-input" onchange="updateImage()" value="https://www.dropbox.com/s/580lhbwgejm5rwc/science.jpeg?raw=1">
+      </div>
+      <div class="save-button z5" onclick="saveData();">Save</div>
+      <div class="load-button z5" onclick="loadData();">Load</div>
+      <div class="circle-size-value z5">
+        <div class="circle-size-label">Circle Size</div>
+        <input type="text" id="circle-size-value-input" onchange="updateCircleSize()" value="60">
+      </div>
+    </div>
+
+    <div class="right-panel z5 initial-hidden">
+      <div class="new-circle z5">New Circle
+        <div class="move-connect" onclick="toggleConnect();">Connect Circles</div>
+      </div>
+      <div class="remove-circle z5">Remove Circle
+        <div class="icon"><i class="fa fa-trash fa-5x"></i></div>
+      </div>
+      <div class="edit-circle z5">
+        <div>Edit Circle</div>
+        <div class="edit-name-label">Name</div>
+        <input type="text" id="name" onchange="updateName(this);" value="Hello">
+        <div class="edit-aliases-label">Aliases</div>
+        <input type="text" id="alias" onchange="addAlias()" value="">
+        <div class="aliases-container">
+          <div id="alias-list"></div>
+        </div>
+        <hr class="connection-divider">
+        <div class="edit-connections-label">Connections</div>
+        <div class="connections-container">
+          <div id="line-ends"></div>
+        </div>
+        <hr class="connection-divider">
+        <div class="edit-weight-label">Weight</div>
+        <input type="text" id="weight" onchange="updateWeight()" value="">
+        <hr class="connection-divider">
+        <div class="edit-appearance-label">Appearance</div>
+        <form class="route-radio-buttons-form">
+          <input type="radio" name="display" value="begin-end" class="route-radio-buttons" onclick="updateAppearance(this)">Only at begin/end
+          <br>
+          <input type="radio" name="display" value="enroute" class="route-radio-buttons" onclick="updateAppearance(this)">Enroute
+          <br>
+          <input type="radio" name="display" value="route" class="route-radio-buttons" onclick="updateAppearance(this)">Always on route
+          <br>
+          <input type="radio" name="display" value="always" class="route-radio-buttons" onclick="updateAppearance(this)">Always on map
+          <br>
+        </form>
+      </div>
+
+    </div>
+    <div class="circle" style="left: 175px; top: 270px; width: 20px; height: 20px;">Start</div>
+    <div class="circle" style="left: 175px; top: 175px; width: 20px; height: 20px;">Destination</div>
+    <div class="line" data-begin="Start" data-end="Destination" angle="rotate(90deg) translate(0px, -5px)" style="left: 154px; top: 155px; width: 100px; height: 10px; transform: rotate(90deg) translate(0px, -5px)"></div>
+  </div>
+
+</div>
+
+
+<div class="zoom-in zooms z5" onclick="zoomIn()">
+  <div class="zoom-in-icon">+</div>
+</div>
+<div class="zoom-out zooms z5" onclick="zoomOut()">
+  <div class="zoom-out-icon">-</div>
+</div>
+<div class="edit-mode" onclick="toggleEdit()">Log Off</div>
+
+<div class="departure-destination z3">
+  <div class="start">
+    <label class="start-label" for="start-input">Start</label>
+    <input type="text" id="start-input" onclick="showStarts()" onchange="showRoute()" placeholder="Where to begin?">
+  </div>
+  <div class="destination">
+    <label class="destination-label" for="destination-input">Destination</label>
+    <input type="text" id="destination-input" onclick="showDestinations()" onchange="showRoute()" placeholder="Destination?">
+  </div>
+</div>
+<div class="center-panel">
+  <div class="map-selection">
+    <div class="map-selection-buttons z15">
+      <div class="map-button map-selected" onclick="selectMap(this)">1</div>
+      <div class="map-button" onclick="selectMap(this)">2</div>
+      <div class="map-button" onclick="selectMap(this)">3</div>
+      <div class="map-button" onclick="selectMap(this)">4</div>
+      <div class="map-button" onclick="selectMap(this)">5</div>
+      <div class="map-button" onclick="selectMap(this)">6</div>
+      <div class="map-button" onclick="selectMap(this)">7</div>
+      <div class="map-button" onclick="selectMap(this)">8</div>
+    </div>
+  </div>
+  <div class="map-name" contenteditable="true">1st Floor</div>
+</div>
+<!--
+<div class="bottom-panel z5 map-hidden">
+  <div class="map-url z5">
+    <label for="map-url-input">Map Image</label>
+    <input type="text" id="map-url-input" onchange="updateImage()" value="https://www.dropbox.com/s/580lhbwgejm5rwc/science.jpeg?raw=1">
+  </div>
+  <div class="save-button z5" onclick="saveData();">Save</div>
+  <div class="load-button z5" onclick="loadData();">Load</div>
+  <div class="circle-size-value z5">
+    <div class="circle-size-label">Circle Size</div>
+    <input type="text" id="circle-size-value-input" onchange="updateCircleSize()" value="60">
+  </div>
+</div>
+
+<div class="right-panel map-hidden">
+  <div class="new-circle">New Circle
+    <div class="move-connect" onclick="toggleConnect();">Connect Circles</div>
+  </div>
+  <div class="remove-circle">Remove Circle
+    <div class="icon"><i class="fa fa-trash fa-5x"></i></div>
+  </div>
+  <div class="edit-circle">
+    <div>Edit Circle</div>
+    <div class="edit-name-label">Name</div>
+    <input type="text" id="name" onchange="updateName(this);" value="Hello">
+    <div class="edit-aliases-label">Aliases</div>
+    <input type="text" id="alias" onchange="addAlias()" value="">
+    <div id="alias-list"></div>
+    <div class="edit-connections-label">Connections</div>
+    <hr class="connection-divider">
+    <div id="line-ends"></div>
+  </div>
+
+</div>
+-->
+<div class="disable-buttons-overlay disable-buttons-hidden" onclick="skipAnimation()">
+</div>
+
+<div class="login-overlay login-hidden">
+</div>
+<div class="login-box login-hidden">
+  <div class="title-bar">
+    <div class="title">LOGIN</div>
+    <div class="close-box" onclick="closeLogin()"><i class="fa fa-times close-icon"></i></div>
+  </div>
+  <div class="username">
+    <label for="username-input" class="username-label">Username</label>
+    <input type="text" id="username-input">
+  </div>
+  <div class="password">
+    <label for="password-input" class="password-label">Password</label>
+    <input type="text" id="password-input">
+  </div>
+
+  <div class="remember-checkbox">
+    <input id="remember" type="checkbox">
+    <label for="remember">Remember me on this computer</label>
+  </div>
+  <div class="back-login">
+    <div class="back" onclick="closeLogin()">
+      <i class="fa fa-angle-double-left"></i> Back
+    </div>
+    <div class="login" onclick="login()">
+      Login
+    </div>
+  </div>
+  <div class="forgot" onclick="resetPassword()">Forgot password?</div>
+</div>
+<div class="image-preloader-container"></div>
+<!-- <div class="error-display">Troubleshooting Error Messages Can Go Here</div> -->
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
+<script src='https://www.parsecdn.com/js/parse-1.6.7.min.js'></script>
+<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
+
+        <script src="js/index.js"></script>
+
+    
+    
+    
+  </body>
+</html>
